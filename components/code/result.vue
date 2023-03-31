@@ -1,0 +1,3 @@
+<template>
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio esse eaque omnis veritatis saepe magni repellendus aut sed? Quas mollitia quae hic consectetur eum doloremque eaque nihil? Dolorum necessitatibus voluptatum amet doloremque itaque debitis delectus earum quos ut inventore in assumenda, qui deserunt nisi minima. Odit omnis laborum eaque corporis perferendis quas obcaecati minima, ullam ex! Earum et distinctio veritatis ea quam aut optio facilis fugit, sed non nihil doloribus debitis illum itaque quas numquam similique, molestias explicabo autem fugiat at illo cumque cum. Reprehenderit quaerat nesciunt est itaque, eligendi accusamus assumenda ullam fugiat placeat obcaecati iusto, quisquam exercitationem repellat.
+</template>
