@@ -75,3 +75,12 @@ const monacoConfig = {
   cursorStyle: 'line',
 };
 </script>
+
+<style>
+.monaco-editor-container {
+  /* display: flex !important; */
+  min-height: 530px;
+  /* min-width: 50%; */
+  width: 50% !important;
+}
+</style>

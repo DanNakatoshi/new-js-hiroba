@@ -1,5 +1,6 @@
 <template>
-  <CodeEditor />
+      <CodeEditor />
+
 </template>
 
 <script setup>
