@@ -10,7 +10,6 @@
               v-model="valueJS"
               :options="monacoConfig"
             />
-            <Button @click="runJavaScript">Run</Button>
           </TabPanel>
           <TabPanel header="HTML">
             <MonacoEditor
@@ -33,13 +32,16 @@
       <div class="col-12 md:col-6">
         <TabView>
           <TabPanel header="Result">
-            <iframe
-              :srcdoc="result"
-              frameborder="0"
-              ref="iframeResult"
-              id="iframe-result"
-            ></iframe>
+            <div class="iframe-container">
+              <iframe
+                :srcdoc="iframeDoc"
+                frameborder="0"
+                class="iframe-result h-full w-full"
+                
+              ></iframe>
+            </div>
           </TabPanel>
+          <TabPanel header="console"> </TabPanel>
         </TabView>
       </div>
     </div>
@@ -49,48 +51,89 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 
-const iframeResult = ref(null);
-
 const valueJS = ref(`
-const a = 1;
-const b = 2;
-const c = a + b;
-console.log(c);
+var d = new Date();
+var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 
+var date = document.getElementById("date");
+var time = document.getElementById("time");
 
-let menu = document.getElementById('menu');
+function getDate() {
+    date.innerHTML = monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+}
 
-// create new li element
-let li = document.createElement('li');
-li.textContent = 'About Us';
-// add it to the ul element
-menu.appendChild(li);
+function timer() {
+    setTimeout(timer, 1000);
+    var d = new Date();
+    var hours = d.getHours();
+    var minutes = d.getMinutes();
+    var ampm = hours <= 11 ? 'am' : 'pm';
+    var strTime = [hours % 12,
+                  (minutes < 10 ? "0" + minutes : minutes)
+                  ].join(':') + ampm;
+    time.innerHTML = strTime;
+    setTimeout(timer, 1000);
+}
+
+getDate();
+timer();
 `);
 
 const valueHTML = ref(`
-<div>
-  <h1>Hello World</h1>
-  <ul id="menu">
-        <li>Home</li>
-        <li>Services</li>
-    </ul>
-</div>
+    <div class="wrapper">
+        <div class="content">
+            <h1 id="date" class="date"></h1>
+            <h3 id="time" class="time"></h3>
+        </div>
+    </div>
+    
 `);
 
 const valueCSS = ref(
   `
-h1 {
-  color: red;
+
+  * {
+    margin: 0;
+    padding: 0;
 }
-div {
-  background-color: blue;
+
+body {
+    background: #fff;
+    font-family: lato,sans-serif;
+    color: #bdc3c7;
+}
+
+.wrapper {
+    width: 400px;
+    margin: 10% auto;
+}
+
+.content {
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    width: 400px;
+}
+
+.date, .time {
+    color: #bdc3c7;
+    font-weight: 300;
+    font-size: 1.5em;
+    padding: 20px;
+}
+
+.date {
+    border-bottom: 2px solid #eee;
+}
+
+.time {
+    font-size: 3em;
 }
 `
 );
 
-const result = computed(() => {
+const iframeDoc = computed(() => {
   return `
-    <!DOCTYPE html>
+  <!DOCTYPE html>
     <html lang="en">
       <head>
         <style>
@@ -99,19 +142,12 @@ const result = computed(() => {
       </head>
       <body>
         ${valueHTML.value}
-
         <script>${valueJS.value}<\/script>
+
       </body>
     </html>
-    `;
+`;
 });
-
-// function that saves the console.log result
-function saveConsoleLog() {
-  console.log(consoleResult.value);
-}
-
-// display console.log result in iframe
 
 const monacoConfig = {
   theme: 'vs-dark',
@@ -137,46 +173,23 @@ const monacoConfig = {
   cursorSmoothCaretAnimation: true,
   cursorStyle: 'line',
 };
-
-// const consoleResult = ref(null);
-// function ConsoleLog() {
-//   console.log = function (message) {
-//     if (typeof message == 'object') {
-//       consoleResult.value +=
-//         (JSON && JSON.stringify ? JSON.stringify(message) : String(message)) +
-//         '<br />';
-//     } else {
-//       consoleResult.value += message + '<br />';
-//     }
-//   };
-// }
-
-function runJavaScript() {
-  // eval(valueJS.value);
-  ConsoleLog(valueJS.value);
-}
-
-// onNuxtReady(() => {
-//   var script = document.createElement('script');
-
-//   script.innerHTML = valueJS.value;
-//   console.log(document.body);
-//   document.body.appendChild(script);
-
-//   console.log(body);
-// });
 </script>
 
 <style>
 .monaco-editor-container {
-  display: flex !important;
   min-height: 530px;
-  min-width: 30px;
-  width: 100% !important;
+  height: 530px;
+}
+
+.iframe-container {
+  width: 100%;
+  height: 530px;
 }
 
 #iframe-result {
-  width: 100%;
-  height: 100%;
+  width: 100svw;
+  min-height: 530px;
+  height: 800px;
+  border: none;
 }
 </style>

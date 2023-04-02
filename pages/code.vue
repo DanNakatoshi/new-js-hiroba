@@ -1,8 +1,5 @@
 <template>
-      <CodeEditor />
-
+  <CodeEditor />
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
