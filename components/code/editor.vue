@@ -1,17 +1,43 @@
 <template>
   <div class="lg:hidden">
-    <Button @click="openTab(0)">HTML</Button>
+    <div class="flex">
+      <div
+        @click="openTab(0)"
+        class="editor-tab flex justify-content-center py-2 px-3 mr-1"
+      >
+        HTML
+      </div>
+      <div
+        @click="openTab(1)"
+        class="editor-tab flex justify-content-center py-2 px-3 mr-1"
+      >
+        CSS
+      </div>
+      <div
+        @click="openTab(2)"
+        class="editor-tab flex justify-content-center py-2 px-3 mr-1"
+      >
+        JS
+      </div>
+      <div
+        @click="openTab(3)"
+        class="editor-tab flex justify-content-center py-2 px-3 "
+      >
+        Result
+      </div>
+    </div>
+    <!-- <Button @click="openTab(0)">HTML</Button>
     <Button @click="openTab(1)">CSS</Button>
     <Button @click="openTab(2)">JS</Button>
-    <Button @click="openTab(3)">Result</Button>
+    <Button @click="openTab(3)">Result</Button> -->
   </div>
-  
+
   <div class="grid">
     <div
       class="lg:col-4 col-12 lg:block"
       :class="[activeTab === 0 ? '' : 'hidden']"
     >
-      <div class="editor-tab">HTML</div> 
+      <div class="editor-tab hidden lg:block editor-tab--desktop">HTML</div>
       <MonacoEditor
         class="monaco-editor-container"
         lang="html"
@@ -23,7 +49,7 @@
       class="lg:col-4 col-12 lg:block"
       :class="[activeTab === 1 ? '' : 'hidden']"
     >
-    <div class="editor-tab">CSS</div> 
+      <div class="editor-tab hidden lg:block editor-tab--desktop">CSS</div>
 
       <MonacoEditor
         class="monaco-editor-container"
@@ -36,7 +62,7 @@
       class="lg:col-4 col-12 lg:block"
       :class="[activeTab === 2 ? '' : 'hidden']"
     >
-    <div class="editor-tab">JS</div> 
+      <div class="editor-tab hidden lg:block editor-tab--desktop">JS</div>
 
       <MonacoEditor
         class="monaco-editor-container"
@@ -49,7 +75,7 @@
       class="col-12 lg:block"
       :class="[activeTab === 3 ? '' : 'hidden']"
     >
-    <div class="editor-tab">Result</div> 
+      <div class="editor-tab hidden lg:block editor-tab--desktop">Result</div>
 
       <div class="iframe-container">
         <iframe
@@ -70,7 +96,6 @@ const activeTab = ref(0);
 function openTab(index) {
   activeTab.value = index;
 }
-
 
 const valueJS = ref(`
 const i = 5
@@ -145,29 +170,34 @@ const monacoConfig = {
 };
 </script>
 
-<style>
+<style lang="scss">
+$editor-border-radius: 0px 5px 5px 5px;
+$editor-min-height: 530px;
+
 .monaco-editor-container {
-  min-height: 530px;
+  min-height: $editor-min-height;
   height: 530px;
   width: 100%;
 }
 
 .monaco-editor {
-  border-radius: 0 5px 5px 5px;
+  border-radius: $editor-border-radius;
 }
 
 .overflow-guard {
-  border-radius: 0 5px 5px 5px;
+  border-radius: $editor-border-radius;
 }
 
 .iframe-container {
   width: 100%;
-  height: 530px;
+  height: $editor-min-height;
+  border: #1e1e1e 2px solid;
+  border-radius: $editor-border-radius;
 }
 
 #iframe-result {
   width: 100svw;
-  min-height: 530px;
+  min-height: $editor-min-height;
   height: 800px;
   border: none;
 }
@@ -175,11 +205,14 @@ const monacoConfig = {
 .editor-tab {
   background-color: #1e1e1e;
   border-radius: 5px 5px 0 0;
-  width: 100px;
   color: #fff;
   padding: 10px;
   font-size: 16px;
   font-weight: 600;
   text-align: center;
+}
+
+.editor-tab--desktop {
+  width: 100px;
 }
 </style>
