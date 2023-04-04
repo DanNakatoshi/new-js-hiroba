@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     'primevue/resources/themes/saga-blue/theme.css', //テーマカラーは色々あります。
     'primevue/resources/primevue.min.css',
     'primeicons/primeicons.css',
+    '~/assets/css/global.css', //Custom Prime Flex
     '~/assets/css/reset.css', //Custom Prime Flex
     '~/assets/css/primeflex.css', //Custom Prime Flex
   ],

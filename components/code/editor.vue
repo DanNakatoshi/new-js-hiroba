@@ -1,48 +1,62 @@
 <template>
-  <div class="flex-row">
-    <div class="flex flex-wrap">
-      <div class="col-12 md:col-6">
-        <TabView>
-          <TabPanel header="JavaScript">
-            <MonacoEditor
-              class="monaco-editor-container"
-              lang="javascript"
-              v-model="valueJS"
-              :options="monacoConfig"
-            />
-          </TabPanel>
-          <TabPanel header="HTML">
-            <MonacoEditor
-              class="monaco-editor-container"
-              lang="html"
-              v-model="valueHTML"
-              :options="monacoConfig"
-            />
-          </TabPanel>
-          <TabPanel header="CSS">
-            <MonacoEditor
-              class="monaco-editor-container"
-              lang="css"
-              v-model="valueCSS"
-              :options="monacoConfig"
-            />
-          </TabPanel>
-        </TabView>
-      </div>
-      <div class="col-12 md:col-6">
-        <TabView>
-          <TabPanel header="Result">
-            <div class="iframe-container">
-              <iframe
-                :srcdoc="iframeDoc"
-                frameborder="0"
-                class="iframe-result h-full w-full"
-                
-              ></iframe>
-            </div>
-          </TabPanel>
-          <TabPanel header="console"> </TabPanel>
-        </TabView>
+  <div class="lg:hidden">
+    <Button @click="openTab(0)">HTML</Button>
+    <Button @click="openTab(1)">CSS</Button>
+    <Button @click="openTab(2)">JS</Button>
+    <Button @click="openTab(3)">Result</Button>
+  </div>
+  
+  <div class="grid">
+    <div
+      class="lg:col-4 col-12 lg:block"
+      :class="[activeTab === 0 ? '' : 'hidden']"
+    >
+      <div class="editor-tab">HTML</div> 
+      <MonacoEditor
+        class="monaco-editor-container"
+        lang="html"
+        v-model="valueHTML"
+        :options="monacoConfig"
+      />
+    </div>
+    <div
+      class="lg:col-4 col-12 lg:block"
+      :class="[activeTab === 1 ? '' : 'hidden']"
+    >
+    <div class="editor-tab">CSS</div> 
+
+      <MonacoEditor
+        class="monaco-editor-container"
+        lang="css"
+        v-model="valueCSS"
+        :options="monacoConfig"
+      />
+    </div>
+    <div
+      class="lg:col-4 col-12 lg:block"
+      :class="[activeTab === 2 ? '' : 'hidden']"
+    >
+    <div class="editor-tab">JS</div> 
+
+      <MonacoEditor
+        class="monaco-editor-container"
+        lang="javascript"
+        v-model="valueJS"
+        :options="monacoConfig"
+      />
+    </div>
+    <div
+      class="col-12 lg:block"
+      :class="[activeTab === 3 ? '' : 'hidden']"
+    >
+    <div class="editor-tab">Result</div> 
+
+      <div class="iframe-container">
+        <iframe
+          :srcdoc="iframeDoc"
+          frameborder="0"
+          class="iframe-result h-full w-full"
+        ></iframe>
       </div>
     </div>
   </div>
@@ -51,83 +65,39 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 
+const activeTab = ref(0);
+
+function openTab(index) {
+  activeTab.value = index;
+}
+
+
 const valueJS = ref(`
-var d = new Date();
-var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-
-var date = document.getElementById("date");
-var time = document.getElementById("time");
-
-function getDate() {
-    date.innerHTML = monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-}
-
-function timer() {
-    setTimeout(timer, 1000);
-    var d = new Date();
-    var hours = d.getHours();
-    var minutes = d.getMinutes();
-    var ampm = hours <= 11 ? 'am' : 'pm';
-    var strTime = [hours % 12,
-                  (minutes < 10 ? "0" + minutes : minutes)
-                  ].join(':') + ampm;
-    time.innerHTML = strTime;
-    setTimeout(timer, 1000);
-}
-
-getDate();
-timer();
+const i = 5
 `);
 
 const valueHTML = ref(`
     <div class="wrapper">
         <div class="content">
-            <h1 id="date" class="date"></h1>
+            <h1 id="date" class="date">Date</h1>
             <h3 id="time" class="time"></h3>
         </div>
     </div>
-    
+
 `);
 
 const valueCSS = ref(
   `
 
-  * {
+* {
     margin: 0;
     padding: 0;
 }
 
-body {
-    background: #fff;
-    font-family: lato,sans-serif;
-    color: #bdc3c7;
+html{
+  background-color: #000;
 }
 
-.wrapper {
-    width: 400px;
-    margin: 10% auto;
-}
-
-.content {
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    width: 400px;
-}
-
-.date, .time {
-    color: #bdc3c7;
-    font-weight: 300;
-    font-size: 1.5em;
-    padding: 20px;
-}
-
-.date {
-    border-bottom: 2px solid #eee;
-}
-
-.time {
-    font-size: 3em;
-}
 `
 );
 
@@ -179,6 +149,15 @@ const monacoConfig = {
 .monaco-editor-container {
   min-height: 530px;
   height: 530px;
+  width: 100%;
+}
+
+.monaco-editor {
+  border-radius: 0 5px 5px 5px;
+}
+
+.overflow-guard {
+  border-radius: 0 5px 5px 5px;
 }
 
 .iframe-container {
@@ -191,5 +170,16 @@ const monacoConfig = {
   min-height: 530px;
   height: 800px;
   border: none;
+}
+
+.editor-tab {
+  background-color: #1e1e1e;
+  border-radius: 5px 5px 0 0;
+  width: 100px;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
 }
 </style>
